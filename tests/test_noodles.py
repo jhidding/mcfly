@@ -19,9 +19,9 @@ else:
         reason="This test needs Noodles.")
 class NoodlesSuite(unittest.TestCase):
     """Basic test cases."""
-
     def test_find_best_architecture(self):
-        """ Find_best_architecture should return a single model, parameters, type and valid knn accuracy."""
+        """Find_best_architecture should return a single model, parameters,
+        type and valid knn accuracy."""
         np.random.seed(123)
         num_timesteps = 100
         num_channels = 2
@@ -36,11 +36,13 @@ class NoodlesSuite(unittest.TestCase):
         y_val = to_categorical(np.array([0, 1, 1]))
 
         def run(wf):
-            return noodles.run_process(wf, n_processes=4, registry=serial_registry)
+            return noodles.run_process(
+                wf, n_processes=4, registry=serial_registry)
 
-        best_model, best_params, best_model_type, knn_acc = find_architecture.find_best_architecture(
-            X_train, y_train, X_val, y_val, verbose=False, subset_size=10,
-            number_of_models=1, nr_epochs=1, use_noodles=run)
+        best_model, best_params, best_model_type, knn_acc = \
+            find_architecture.find_best_architecture(
+                X_train, y_train, X_val, y_val, verbose=False, subset_size=10,
+                number_of_models=1, nr_epochs=1, use_noodles=run)
         assert hasattr(best_model, 'fit')
         self.assertIsNotNone(best_params)
         self.assertIsNotNone(best_model_type)
@@ -61,7 +63,8 @@ class NoodlesSuite(unittest.TestCase):
         y_val = to_categorical(np.array([0, 1, 1]))
 
         def run(wf):
-            return noodles.run_process(wf, n_processes=4, registry=serial_registry)
+            return noodles.run_process(
+                wf, n_processes=4, registry=serial_registry)
 
         histories, val_metrics, val_losses = \
             find_architecture.train_models_on_samples(
