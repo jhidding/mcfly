@@ -1,6 +1,7 @@
 from noodles import gather_all, schedule
-from noodles.tutorial import (sub, mul, echo_add, add)
+from noodles.tutorial import (sub, mul, add)
 from mcfly.run_noodles import run_remote
+from echo_add import echo_add
 
 
 def test_xenon_42_multi():

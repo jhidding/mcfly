@@ -25,9 +25,7 @@ def run_remote(workflow, config_file='mcfly.ini'):
             username=config['xenon']['user'],
             password=config['xenon']['password'])
     else:
-        print("The mcfly.ini file should provide a certificate or "
-              "a password.")
-        sys.exit(1)
+        credential = None
 
     xenon.init()
     machine = Machine(
