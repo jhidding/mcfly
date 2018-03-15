@@ -17,6 +17,7 @@ from .storage import TrainedModel
 try:
     import noodles
     from .storage import serial_registry
+    from .run_noodles import run_remote
 except ImportError:
     has_noodles = False
 else:
@@ -87,6 +88,9 @@ def train_models_on_samples(X_train, y_train, X_val, y_val, models,
         nr of samples per batch
     metric : str
         metric to store in the history object
+    use_noodles : bool, optional
+        when True, train the model using the noodles, reading config from
+        mcfly.ini.
 
     Returns
     ----------
@@ -106,6 +110,11 @@ def train_models_on_samples(X_train, y_train, X_val, y_val, models,
     val_metrics = []
     val_losses = []
 
+    if has_noodles and use_noodles is True:
+        use_noodles = run_remote
+    elif use_noodles is True:
+        raise ImportError('Asked for Noodles, but could not import.')
+
     def make_history(model, i=None):
         model_metrics = [get_metric_name(name) for name in model.metrics]
         if metric_name not in model_metrics:
@@ -124,7 +133,7 @@ def train_models_on_samples(X_train, y_train, X_val, y_val, models,
                   'verbose': verbose,
                   'callbacks': callbacks}
 
-        if use_noodles is None:
+        if not use_noodles:
             # if not using noodles, save every nugget when it comes
             trained_model = train_model(*args, **kwargs)
             if outputfile is not None:
@@ -140,7 +149,7 @@ def train_models_on_samples(X_train, y_train, X_val, y_val, models,
             return noodles.schedule_hint(call_by_ref=['model']) \
                     (train_model)(*args, **kwargs)
 
-    if use_noodles is None:
+    if not use_noodles:
         trained_models = [
             make_history(model[0], i)
             for i, model in enumerate(models)]

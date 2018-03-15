@@ -6,3 +6,4 @@ notebooks/tutorial/data
 *.hdf5
 .coverage
 .cache
+.*.swp
